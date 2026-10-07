@@ -1,268 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>加载同目录下的 MP3 与 PNG</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      min-height: 100vh;
-      background: linear-gradient(145deg, #1e1e2f 0%, #2a2a40 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
-      padding: 1.5rem;
-    }
-
-    .card {
-      background: rgba(255, 255, 255, 0.07);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-radius: 2.5rem;
-      padding: 2rem 2rem 2.2rem 2rem;
-      box-shadow: 0 25px 40px -10px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      max-width: 800px;
-      width: 100%;
-      transition: transform 0.2s ease;
-    }
-
-    .card:hover {
-      transform: scale(1.005);
-    }
-
-    h1 {
-      font-size: 1.7rem;
-      font-weight: 500;
-      letter-spacing: -0.02em;
-      color: #f0eef7;
-      text-align: center;
-      margin-bottom: 0.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    h1 span {
-      background: rgba(255, 255, 255, 0.12);
-      padding: 0.15rem 0.9rem;
-      border-radius: 40px;
-      font-size: 0.9rem;
-      font-weight: 400;
-      color: #c6c2e0;
-    }
-
-    .subhead {
-      text-align: center;
-      color: #a7a3c2;
-      font-size: 0.95rem;
-      margin-bottom: 2rem;
-      border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
-      padding-bottom: 0.85rem;
-    }
-
-    .media-grid {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2rem;
-    }
-
-    .image-container {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      border-radius: 2rem;
-      background: rgba(0, 0, 0, 0.2);
-      padding: 0.75rem;
-      box-shadow: inset 0 6px 12px rgba(0, 0, 0, 0.4);
-    }
-
-    .image-container img {
-      display: block;
-      max-width: 100%;
-      height: auto;
-      max-height: 360px;
-      border-radius: 1.5rem;
-      box-shadow: 0 12px 25px -8px black;
-      object-fit: contain;
-      transition: opacity 0.2s;
-      background: #1a1a28;
-    }
-
-    .audio-section {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: 3rem;
-      padding: 1.2rem 1.5rem;
-    }
-
-    audio {
-      width: 100%;
-      border-radius: 50px;
-      background: transparent;
-      outline: none;
-      /* 现代浏览器音频控件样式微调 */
-      accent-color: #9f7aea;
-    }
-
-    audio::-webkit-media-controls-panel {
-      background: #2b2a3e;
-      border-radius: 50px;
-      padding: 0 1rem;
-    }
-
-    audio::-webkit-media-controls-play-button {
-      background-color: #b8a9ff;
-      border-radius: 50%;
-      transform: scale(1.1);
-    }
-
-    .filename-badge {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-      font-size: 0.9rem;
-      color: #b7b1d6;
-      background: rgba(255, 255, 255, 0.03);
-      padding: 0.5rem 1.4rem;
-      border-radius: 100px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      word-break: break-all;
-      max-width: 100%;
-    }
-
-    .filename-badge code {
-      background: rgba(159, 122, 234, 0.2);
-      padding: 0.2rem 0.6rem;
-      border-radius: 30px;
-      color: #d4c9ff;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.85rem;
-    }
-
-    .note {
-      margin-top: 1.5rem;
-      font-size: 0.8rem;
-      color: #716e8b;
-      text-align: center;
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .note i {
-      font-style: normal;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 0.2rem 0.7rem;
-      border-radius: 30px;
-    }
-
-    /* 占位失败时的样式微调 */
-    img[alt]:after {
-      content: "";
-    }
-
-    /* 音频不可用时的视觉提示 */
-    .audio-section audio:not([src]) {
-      opacity: 0.5;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>播放</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+  }
+</style>
 </head>
 <body>
-  <div class="card">
-    <h1>
-      🎵 同目录媒体加载
-      <span>MP3 + PNG</span>
-    </h1>
-    <div class="subhead">
-      自动加载同目录下的音频与图片
-    </div>
-
-    <div class="media-grid">
-      <!-- 图片区域：加载同目录下的 PNG 文件（默认名: image.png） 
-           如果图片名字不同，请修改 src 属性 -->
-      <div class="image-container">
-        <img 
-          src="image.png" 
-          alt="同目录 PNG 图片" 
-          title="同目录下的 PNG (image.png)"
-          loading="eager"
-          onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22225%22 viewBox=%220 0 400 225%22%3E%3Crect width=%22400%22 height=%22225%22 fill=%22%232a2a3e%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-family=%22system-ui, sans-serif%22 font-size=%2216%22 fill=%22%239f7aea%22%3E⚠️ 未找到 image.png%3C/text%3E%3C/svg%3E';"
-        >
-      </div>
-
-      <!-- 音频区域：加载同目录下的 MP3 文件（默认名: audio.mp3） 
-           如果音频名字不同，请修改 src 属性 -->
-      <div class="audio-section">
-        <audio 
-          controls 
-          src="audio.mp3" 
-          preload="auto"
-          onerror="this.style.opacity='0.6'; this.parentElement.querySelector('.filename-badge')?.classList.add('error')"
-        >
-          您的浏览器不支持音频播放。
-        </audio>
-
-        <div class="filename-badge">
-          <span>📁 同目录文件</span>
-          <code>audio.mp3</code>
-          <span>·</span>
-          <code>image.png</code>
-        </div>
-      </div>
-    </div>
-
-    <div class="note">
-      <i>⏯️ 音频已自动加载</i>
-      <i>🖼️ 图片同名加载</i>
-      <i>✏️ 修改 src 即可更换文件</i>
-    </div>
-  </div>
+  <img src="image.png" alt="">
+  <audio id="bgm" src="audio.mp3" loop></audio>
 
   <script>
-    // 可选：在控制台提示文件加载状态（仅调试用）
-    (function() {
-      const img = document.querySelector('img');
-      const audio = document.querySelector('audio');
-      
-      if (img) {
-        img.addEventListener('load', () => {
-          console.log('✅ PNG 图片加载成功: ' + (img.naturalWidth + 'x' + img.naturalHeight));
-        });
-        img.addEventListener('error', () => {
-          console.warn('⚠️ 未能加载 image.png，请确保该文件位于 HTML 同级目录。');
-        });
-      }
+    var audio = document.getElementById('bgm');
 
-      if (audio) {
-        audio.addEventListener('canplaythrough', () => {
-          console.log('✅ MP3 音频已就绪，可以播放。');
-        });
-        audio.addEventListener('error', (e) => {
-          console.warn('⚠️ 音频加载失败，请检查同目录下是否存在 audio.mp3。', e);
-        });
-        // 自动播放可能被浏览器策略阻止，这里仅做提醒
-        audio.addEventListener('play', () => {
-          console.log('▶️ 音频开始播放');
-        });
-      }
-    })();
+    function playAudio() {
+      audio.play().catch(function () {});
+    }
+
+    // 尝试直接播放
+    playAudio();
+
+    // 浏览器自动播放被拦截时，用户首次交互后再播放
+    document.addEventListener('click', playAudio);
+    document.addEventListener('touchstart', playAudio);
+    document.addEventListener('keydown', playAudio);
   </script>
 </body>
 </html>
